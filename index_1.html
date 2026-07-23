@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
+<title>Overblik</title>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Overblik">
+<meta name="theme-color" content="#0f1b2d">
+<link rel="apple-touch-icon" href="data:image/png;base64,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">
+<style>
+  :root {
+    --bg: #f4f5f7;
+    --card: #ffffff;
+    --text: #16202e;
+    --text-dim: #6b7686;
+    --accent: #d95f38;
+    --accent-soft: rgba(217,95,56,.12);
+    --border: rgba(22,32,46,.08);
+    --tabbar: rgba(255,255,255,.92);
+    --read: #9aa4b2;
+    --shadow: 0 1px 3px rgba(22,32,46,.06);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #0f1b2d;
+      --card: #182741;
+      --text: #e8edf5;
+      --text-dim: #8b98ac;
+      --accent: #e8734a;
+      --accent-soft: rgba(232,115,74,.16);
+      --border: rgba(232,237,245,.07);
+      --tabbar: rgba(15,27,45,.92);
+      --read: #5d6b80;
+      --shadow: 0 1px 3px rgba(0,0,0,.25);
+    }
+  }
+  * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color: transparent; }
+  html { height:100%; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background: var(--bg); color: var(--text);
+    min-height:100%;
+    padding-bottom: calc(76px + env(safe-area-inset-bottom));
+    -webkit-font-smoothing: antialiased;
+  }
+  header {
+    position: sticky; top:0; z-index:10;
+    background: var(--tabbar);
+    -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--border);
+    padding: calc(10px + env(safe-area-inset-top)) 16px 10px;
+    display:flex; align-items:center; justify-content:space-between;
+  }
+  .brand { display:flex; align-items:baseline; gap:8px; }
+  .brand h1 { font-size:20px; font-weight:800; letter-spacing:-.3px; }
+  .brand h1 em { color: var(--accent); font-style: normal; }
+  .brand .count { font-size:12px; color:var(--text-dim); font-weight:500; }
+  .hbtns { display:flex; gap:8px; }
+  .hbtn {
+    border:none; background: var(--accent-soft); color: var(--accent);
+    font: inherit; font-size:13px; font-weight:600;
+    padding: 7px 12px; border-radius: 999px; cursor:pointer;
+  }
+  .hbtn:active { opacity:.6; }
+  .hbtn.spin svg { animation: rot 1s linear infinite; }
+  @keyframes rot { to { transform: rotate(360deg); } }
+  main { padding: 14px 14px 8px; max-width: 640px; margin: 0 auto; }
+  .status { font-size:12px; color:var(--text-dim); text-align:center; padding: 4px 0 12px; min-height: 18px; }
+  .card {
+    display:block; background: var(--card); border-radius: 14px;
+    padding: 13px 14px; margin-bottom: 10px;
+    text-decoration: none; color: inherit;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--border);
+  }
+  .card:active { transform: scale(.985); }
+  .meta { display:flex; align-items:center; gap:8px; margin-bottom:6px; }
+  .src {
+    font-size:11px; font-weight:700; letter-spacing:.4px; text-transform:uppercase;
+    color: var(--accent);
+  }
+  .lang {
+    font-size:10px; font-weight:700; color:var(--text-dim);
+    border:1px solid var(--border); border-radius:4px; padding:1px 4px;
+  }
+  .ago { font-size:11px; color: var(--text-dim); margin-left:auto; flex-shrink:0; }
+  .card h2 { font-size:16px; font-weight:650; line-height:1.35; letter-spacing:-.1px; }
+  .card.read { opacity:.55; }
+  .card.read h2 { color: var(--read); font-weight:500; }
+  .done {
+    text-align:center; padding: 42px 20px 30px; color: var(--text-dim);
+  }
+  .done .big { font-size:40px; margin-bottom:10px; }
+  .done .msg { font-size:16px; font-weight:650; color:var(--text); margin-bottom:6px; }
+  .done .sub { font-size:13px; line-height:1.5; }
+  .failnote { font-size:11px; color:var(--text-dim); text-align:center; padding: 10px 0 20px; }
+  nav {
+    position: fixed; left:0; right:0; bottom:0; z-index:10;
+    background: var(--tabbar);
+    -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px);
+    border-top: 1px solid var(--border);
+    display:flex; justify-content:space-around;
+    padding: 8px 6px calc(8px + env(safe-area-inset-bottom));
+  }
+  .tab {
+    flex:1; border:none; background:none; cursor:pointer;
+    font: inherit; color: var(--text-dim);
+    display:flex; flex-direction:column; align-items:center; gap:3px;
+    padding: 4px 0; position:relative;
+  }
+  .tab .ico { font-size:20px; line-height:1; filter: grayscale(1) opacity(.55); }
+  .tab .lbl { font-size:10.5px; font-weight:600; }
+  .tab.active { color: var(--accent); }
+  .tab.active .ico { filter:none; }
+  .tab .badge {
+    position:absolute; top:-1px; right: calc(50% - 22px);
+    background: var(--accent); color:#fff;
+    font-size:9.5px; font-weight:700;
+    min-width:16px; height:16px; border-radius:8px;
+    display:flex; align-items:center; justify-content:center; padding:0 4px;
+  }
+  .tab .badge.zero { display:none; }
+  .skel { height:74px; border-radius:14px; margin-bottom:10px;
+    background: linear-gradient(100deg, var(--card) 40%, var(--accent-soft) 50%, var(--card) 60%);
+    background-size: 200% 100%; animation: sh 1.2s infinite; border:1px solid var(--border); }
+  @keyframes sh { to { background-position: -200% 0; } }
+</style>
+</head>
+<body>
+<header>
+  <div class="brand">
+    <h1>Over<em>blik</em></h1>
+    <span class="count" id="totalCount"></span>
+  </div>
+  <div class="hbtns">
+    <button class="hbtn" id="markAllBtn" title="Mark section read">✓ all</button>
+    <button class="hbtn" id="refreshBtn" title="Refresh">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" style="vertical-align:-1px"><path d="M21 12a9 9 0 1 1-2.6-6.3"/><path d="M21 3v6h-6"/></svg>
+    </button>
+  </div>
+</header>
+
+<main>
+  <div class="status" id="status"></div>
+  <div id="list"></div>
+  <div class="failnote" id="failnote"></div>
+</main>
+
+<nav id="tabbar"></nav>
+
+<script>
+'use strict';
+
+/* ---------- config ---------- */
+var SECTIONS = [
+  { id:'world', label:'World', icon:'🌍', feeds:[
+    { name:'BBC',        url:'https://feeds.bbci.co.uk/news/world/rss.xml' },
+    { name:'Guardian',   url:'https://www.theguardian.com/world/rss' },
+    { name:'NPR',        url:'https://feeds.npr.org/1001/rss.xml' },
+    { name:'Al Jazeera', url:'https://www.aljazeera.com/xml/rss/all.xml' },
+    { name:'DW',         url:'https://rss.dw.com/rdf/rss-en-world' }
+  ]},
+  { id:'scitech', label:'Sci & Tech', icon:'🔬', feeds:[
+    { name:'Ars Technica', url:'https://feeds.arstechnica.com/arstechnica/index' },
+    { name:'Quanta',       url:'https://www.quantamagazine.org/feed/' },
+    { name:'BBC Science',  url:'https://feeds.bbci.co.uk/news/science_and_environment/rss.xml' },
+    { name:'Phys.org',     url:'https://phys.org/rss-feed/' }
+  ]},
+  { id:'money', label:'Money', icon:'📈', feeds:[
+    { name:'BBC Business',   url:'https://feeds.bbci.co.uk/news/business/rss.xml' },
+    { name:'Guardian Biz',   url:'https://www.theguardian.com/uk/business/rss' },
+    { name:'MarketWatch',    url:'https://feeds.content.dowjones.io/public/rss/mw_topstories' },
+    { name:'CNBC',           url:'https://search.cnbc.com/rs/search/combinedcms/view.xml?partnerId=wrss01&id=100003114' },
+    { name:'Yahoo Finance',  url:'https://finance.yahoo.com/news/rssindex' }
+  ]},
+  { id:'danmark', label:'Danmark', icon:'🇩🇰', feeds:[
+    { name:'DR Nyheder', url:'https://www.dr.dk/nyheder/service/feeds/allenyheder', lang:'DA' },
+    { name:'DR Penge',   url:'https://www.dr.dk/nyheder/service/feeds/penge', lang:'DA' },
+    { name:'CPH Post',   url:'https://cphpost.dk/feed/' },
+    { name:'Politico EU',url:'https://www.politico.eu/feed/' }
+  ]}
+];
+var PER_FEED = 8, PER_SECTION = 18, CACHE_MIN = 25;
+var PROXIES = [
+  function(u){ return u; },
+  function(u){ return 'https://api.allorigins.win/raw?url=' + encodeURIComponent(u); },
+  function(u){ return 'https://api.codetabs.com/v1/proxy?quest=' + encodeURIComponent(u); },
+  function(u){ return 'https://corsproxy.io/?url=' + encodeURIComponent(u); }
+];
+
+/* ---------- safe storage (falls back to memory) ---------- */
+var mem = {};
+var store = {
+  get: function(k){ try { var v = localStorage.getItem(k); return v===null ? (k in mem ? mem[k] : null) : v; } catch(e){ return k in mem ? mem[k] : null; } },
+  set: function(k,v){ mem[k]=v; try { localStorage.setItem(k,v); } catch(e){} }
+};
+
+/* ---------- state ---------- */
+var readSet = {};
+try { readSet = JSON.parse(store.get('ob_read') || '{}'); } catch(e){ readSet = {}; }
+var items = {};      // sectionId -> [item]
+var failed = [];
+var current = store.get('ob_tab') || 'world';
+var loading = false;
+var runSeq = 0;
+
+function hash(s){ var h=5381,i=s.length; while(i) h=(h*33)^s.charCodeAt(--i); return (h>>>0).toString(36); }
+function saveRead(){
+  // prune: keep only ids seen in current items (plus cap total) so it never grows forever
+  var keep={}, n=0;
+  for (var sid in items) items[sid].forEach(function(it){ if(readSet[it.id]) keep[it.id]=1; });
+  for (var k in readSet){ if(!(k in keep) && n<400){ keep[k]=1; n++; } }
+  readSet = keep;
+  store.set('ob_read', JSON.stringify(readSet));
+}
+
+/* ---------- fetching ---------- */
+function fetchTimeout(url, ms){
+  return new Promise(function(res, rej){
+    var ctl = ('AbortController' in window) ? new AbortController() : null;
+    var t = setTimeout(function(){ if(ctl) ctl.abort(); rej(new Error('timeout')); }, ms);
+    fetch(url, ctl ? {signal: ctl.signal} : {}).then(function(r){
+      clearTimeout(t);
+      if(!r.ok) return rej(new Error('http '+r.status));
+      r.text().then(res, rej);
+    }, function(e){ clearTimeout(t); rej(e); });
+  });
+}
+function fetchFeed(feed){
+  var i = 0;
+  function attempt(){
+    if (i >= PROXIES.length) return Promise.reject(new Error('all proxies failed'));
+    var u = PROXIES[i++](feed.url);
+    return fetchTimeout(u, 9000).then(function(txt){
+      if (txt.indexOf('<') === -1) throw new Error('not xml');
+      return txt;
+    }).catch(function(){ return attempt(); });
+  }
+  return attempt();
+}
+
+/* ---------- parsing (RSS 2.0, RDF, Atom) ---------- */
+function textOf(el, names){
+  for (var i=0;i<names.length;i++){
+    var kids = el.getElementsByTagName('*');
+    for (var j=0;j<kids.length;j++){
+      var n = kids[j];
+      var ln = (n.localName || n.nodeName || '').toLowerCase();
+      if (ln === names[i] && n.textContent) return n.textContent.trim();
+    }
+  }
+  return '';
+}
+function parseFeed(xml, feed){
+  var doc;
+  try { doc = new DOMParser().parseFromString(xml, 'text/xml'); } catch(e){ return []; }
+  if (!doc || doc.getElementsByTagName('parsererror').length){
+    // some proxies wrap in html — try to salvage
+    var m = xml.match(/<\?xml[\s\S]*$/);
+    if (m) { try { doc = new DOMParser().parseFromString(m[0],'text/xml'); } catch(e){ return []; } }
+    if (!doc || doc.getElementsByTagName('parsererror').length) return [];
+  }
+  var nodes = doc.getElementsByTagName('item');
+  if (!nodes.length) nodes = doc.getElementsByTagName('entry');
+  var out = [];
+  for (var i=0; i<nodes.length && out.length<PER_FEED; i++){
+    var n = nodes[i];
+    var title = textOf(n, ['title']);
+    if (!title) continue;
+    var link = '';
+    var links = n.getElementsByTagName('link');
+    for (var j=0;j<links.length;j++){
+      var l = links[j];
+      var rel = l.getAttribute && l.getAttribute('rel');
+      var href = (l.getAttribute && l.getAttribute('href')) || l.textContent || '';
+      if (href && (!rel || rel === 'alternate')) { link = href.trim(); break; }
+    }
+    if (!link) link = textOf(n, ['guid']);
+    if (!link || link.indexOf('http') !== 0) continue;
+    var dateStr = textOf(n, ['pubdate','published','updated','date']);
+    var t = Date.parse(dateStr);
+    if (isNaN(t)) t = Date.now() - 6*3600e3;
+    out.push({
+      id: hash(link),
+      title: title.replace(/<[^>]*>/g,''),
+      link: link,
+      time: t,
+      src: feed.name,
+      lang: feed.lang || ''
+    });
+  }
+  return out;
+}
+
+/* ---------- load section ---------- */
+function normTitle(t){ return t.toLowerCase().replace(/[^a-z0-9æøå ]/g,'').slice(0,60); }
+function loadAll(force){
+  if (loading) return;
+  var cached = null;
+  try { cached = JSON.parse(store.get('ob_cache') || 'null'); } catch(e){}
+  if (cached && !force && (Date.now() - cached.ts) < CACHE_MIN*60e3){
+    items = cached.items; failed = cached.failed || [];
+    render(); return;
+  }
+  if (cached){ items = cached.items; render(); } // show stale while updating
+  loading = true;
+  var run = ++runSeq;
+  setSpin(true);
+  setStatus('Fetching your sources…');
+  var done = 0, total = 0;
+  var newItems = {}; var newFailed = [];
+  SECTIONS.forEach(function(sec){ newItems[sec.id] = []; total += sec.feeds.length; });
+  var ps = [];
+  SECTIONS.forEach(function(sec){
+    sec.feeds.forEach(function(feed){
+      ps.push(
+        fetchFeed(feed)
+          .then(function(xml){ newItems[sec.id] = newItems[sec.id].concat(parseFeed(xml, feed)); })
+          .catch(function(){ newFailed.push(feed.name); })
+          .then(function(){ done++; if (run === runSeq) setStatus('Fetching your sources… ' + done + '/' + total); })
+      );
+    });
+  });
+  Promise.all(ps).then(function(){
+    if (run !== runSeq) return; // a newer refresh superseded this one
+    SECTIONS.forEach(function(sec){
+      var seen = {};
+      newItems[sec.id] = newItems[sec.id]
+        .sort(function(a,b){ return b.time - a.time; })
+        .filter(function(it){
+          var k = normTitle(it.title);
+          if (seen[k]) return false; seen[k]=1;
+          // don't resurface items older than 3 days
+          return (Date.now() - it.time) < 3*24*3600e3 || true;
+        })
+        .slice(0, PER_SECTION);
+    });
+    var any = SECTIONS.some(function(s){ return newItems[s.id].length; });
+    if (any){
+      items = newItems; failed = newFailed;
+      store.set('ob_cache', JSON.stringify({ts: Date.now(), items: items, failed: failed}));
+      saveRead();
+      setStatus('Updated ' + fmtClock(new Date()));
+    } else {
+      failed = newFailed;
+      setStatus(cached ? 'Couldn’t refresh — showing last saved stories' : 'No connection — try again');
+    }
+    loading = false; setSpin(false); render();
+    setTimeout(function(){ setStatus(''); }, 2500);
+  });
+}
+
+/* ---------- render ---------- */
+function ago(t){
+  var s = (Date.now()-t)/1e3;
+  if (s < 3600) return Math.max(1, Math.round(s/60)) + 'm';
+  if (s < 86400) return Math.round(s/3600) + 'h';
+  return Math.round(s/86400) + 'd';
+}
+function fmtClock(d){ return ('0'+d.getHours()).slice(-2) + ':' + ('0'+d.getMinutes()).slice(-2); }
+function esc(s){ var d=document.createElement('div'); d.textContent=s; return d.innerHTML; }
+function unreadIn(sid){
+  return (items[sid]||[]).filter(function(it){ return !readSet[it.id]; }).length;
+}
+function render(){
+  renderTabs();
+  var list = document.getElementById('list');
+  var arr = items[current] || [];
+  if (!arr.length && loading){
+    list.innerHTML = '<div class="skel"></div><div class="skel"></div><div class="skel"></div><div class="skel"></div><div class="skel"></div>';
+    return;
+  }
+  var unread = arr.filter(function(it){ return !readSet[it.id]; });
+  var read = arr.filter(function(it){ return readSet[it.id]; });
+  var html = '';
+  if (!unread.length && arr.length){
+    var dk = current === 'danmark';
+    html += '<div class="done"><div class="big">☀️</div><div class="msg">' +
+      (dk ? 'Du er helt opdateret' : 'You’re all caught up') +
+      '</div><div class="sub">' +
+      (dk ? 'Ikke mere at scrolle. Gå ud og nyd dagen — eller øv lidt dansk.' :
+            'That’s everything worth reading here. The feed has a bottom — this is it.') +
+      '</div></div>';
+  }
+  unread.concat(read).forEach(function(it){
+    var isRead = !!readSet[it.id];
+    html += '<a class="card' + (isRead?' read':'') + '" data-id="' + it.id + '" href="' + esc(it.link) + '" target="_blank" rel="noopener">' +
+      '<div class="meta"><span class="src">' + esc(it.src) + '</span>' +
+      (it.lang ? '<span class="lang">' + it.lang + '</span>' : '') +
+      '<span class="ago">' + ago(it.time) + '</span></div>' +
+      '<h2>' + esc(it.title) + '</h2></a>';
+  });
+  if (!arr.length && !loading){
+    html = '<div class="done"><div class="big">📡</div><div class="msg">Nothing loaded yet</div><div class="sub">Tap refresh to fetch stories.</div></div>';
+  }
+  list.innerHTML = html;
+  var fn = document.getElementById('failnote');
+  fn.textContent = failed.length ? ('Unavailable right now: ' + failed.join(', ')) : '';
+  var totalUnread = 0;
+  SECTIONS.forEach(function(s){ totalUnread += unreadIn(s.id); });
+  document.getElementById('totalCount').textContent = totalUnread ? totalUnread + ' unread' : '';
+}
+function renderTabs(){
+  var bar = document.getElementById('tabbar');
+  var html = '';
+  SECTIONS.forEach(function(s){
+    var u = unreadIn(s.id);
+    html += '<button class="tab' + (s.id===current?' active':'') + '" data-tab="' + s.id + '">' +
+      '<span class="badge' + (u?'':' zero') + '">' + u + '</span>' +
+      '<span class="ico">' + s.icon + '</span><span class="lbl">' + s.label + '</span></button>';
+  });
+  bar.innerHTML = html;
+}
+
+/* ---------- events ---------- */
+document.getElementById('tabbar').addEventListener('click', function(e){
+  var b = e.target.closest('.tab'); if (!b) return;
+  current = b.getAttribute('data-tab');
+  store.set('ob_tab', current);
+  window.scrollTo(0,0);
+  render();
+});
+document.getElementById('list').addEventListener('click', function(e){
+  var a = e.target.closest('.card'); if (!a) return;
+  var id = a.getAttribute('data-id');
+  if (!readSet[id]){ readSet[id] = 1; store.set('ob_read', JSON.stringify(readSet)); }
+  a.classList.add('read');
+  setTimeout(render, 400);
+});
+document.getElementById('refreshBtn').addEventListener('click', function(){ loadAll(true); });
+document.getElementById('markAllBtn').addEventListener('click', function(){
+  (items[current]||[]).forEach(function(it){ readSet[it.id] = 1; });
+  store.set('ob_read', JSON.stringify(readSet));
+  render();
+});
+function setStatus(t){ document.getElementById('status').textContent = t; }
+function setSpin(on){ document.getElementById('refreshBtn').classList.toggle('spin', on); }
+document.addEventListener('visibilitychange', function(){
+  if (!document.hidden) loadAll(false);
+});
+
+/* ---------- go ---------- */
+render();
+loadAll(false);
+</script>
+</body>
+</html>
