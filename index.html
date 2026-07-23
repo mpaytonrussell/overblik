@@ -88,6 +88,17 @@
   }
   .ago { font-size:11px; color: var(--text-dim); margin-left:auto; flex-shrink:0; }
   .card h2 { font-size:16px; font-weight:650; line-height:1.35; letter-spacing:-.1px; }
+  .blurb { font-size:13.5px; color:var(--text-dim); line-height:1.5; margin-top:6px; }
+  .heat { font-size:10px; font-weight:700; color:var(--accent); background:var(--accent-soft); border-radius:4px; padding:1.5px 5px; }
+  .fgroup { margin-bottom:10px; }
+  .fgroup .card { margin-bottom:0; border-bottom-left-radius:0; border-bottom-right-radius:0; }
+  .alts {
+    font-size:12px; color:var(--text-dim);
+    background:var(--card); border:1px solid var(--border); border-top:none;
+    border-radius:0 0 14px 14px; padding:8px 14px 10px;
+  }
+  .alts a { color:var(--accent); text-decoration:none; font-weight:650; }
+  .card.read + .alts { opacity:.55; }
   .card.read { opacity:.55; }
   .card.read h2 { color: var(--read); font-weight:500; }
   .done {
@@ -156,6 +167,13 @@
 
 /* ---------- config ---------- */
 var SECTIONS = [
+  { id:'front', label:'Front', icon:'📰', front:true, per:12, feeds:[
+    { name:'BBC',        url:'https://feeds.bbci.co.uk/news/rss.xml' },
+    { name:'Guardian',   url:'https://www.theguardian.com/international/rss' },
+    { name:'NPR',        url:'https://feeds.npr.org/1001/rss.xml' },
+    { name:'Al Jazeera', url:'https://www.aljazeera.com/xml/rss/all.xml' },
+    { name:'DW',         url:'https://rss.dw.com/rdf/rss-en-all' }
+  ]},
   { id:'world', label:'World', icon:'🌍', feeds:[
     { name:'BBC',        url:'https://feeds.bbci.co.uk/news/world/rss.xml' },
     { name:'Guardian',   url:'https://www.theguardian.com/world/rss' },
@@ -203,7 +221,7 @@ var readSet = {};
 try { readSet = JSON.parse(store.get('ob_read') || '{}'); } catch(e){ readSet = {}; }
 var items = {};      // sectionId -> [item]
 var failed = [];
-var current = store.get('ob_tab') || 'world';
+var current = store.get('ob_tab') || 'front';
 var loading = false;
 var runSeq = 0;
 
@@ -254,7 +272,17 @@ function textOf(el, names){
   }
   return '';
 }
-function parseFeed(xml, feed){
+function cleanDesc(s){
+  s = s.replace(/<[^>]*>/g,' ').replace(/&nbsp;/g,' ').replace(/\s+/g,' ').trim();
+  if (s.length > 240){
+    s = s.slice(0, 240);
+    var cut = s.lastIndexOf(' ');
+    if (cut > 160) s = s.slice(0, cut);
+    s += '…';
+  }
+  return s;
+}
+function parseFeed(xml, feed, cap){
   var doc;
   try { doc = new DOMParser().parseFromString(xml, 'text/xml'); } catch(e){ return []; }
   if (!doc || doc.getElementsByTagName('parsererror').length){
@@ -266,7 +294,8 @@ function parseFeed(xml, feed){
   var nodes = doc.getElementsByTagName('item');
   if (!nodes.length) nodes = doc.getElementsByTagName('entry');
   var out = [];
-  for (var i=0; i<nodes.length && out.length<PER_FEED; i++){
+  cap = cap || PER_FEED;
+  for (var i=0; i<nodes.length && out.length<cap; i++){
     var n = nodes[i];
     var title = textOf(n, ['title']);
     if (!title) continue;
@@ -289,10 +318,51 @@ function parseFeed(xml, feed){
       link: link,
       time: t,
       src: feed.name,
-      lang: feed.lang || ''
+      lang: feed.lang || '',
+      desc: cleanDesc(textOf(n, ['description','summary']))
     });
   }
   return out;
+}
+
+/* ---------- trending clusters (Front tab) ---------- */
+var STOP = {};
+('the a an and or but of to in on for with as at by from into over after amid under about against is are was were be been being it its this that these those new says said say will would could may might has have had not more most other two three us up out top why how what when live latest news update updates report').split(' ').forEach(function(w){ STOP[w]=1; });
+function tkns(t){
+  var seen = {};
+  return t.toLowerCase().replace(/[^a-z0-9æøå ]/g,' ').split(/\s+/)
+    .filter(function(w){ return w.length > 3 && !STOP[w] && !(w in seen) && (seen[w]=1); });
+}
+function clusterFront(arr){
+  var toks = arr.map(function(it){ return tkns(it.title); });
+  var parent = arr.map(function(_,i){ return i; });
+  function find(x){ while (parent[x] !== x){ parent[x] = parent[parent[x]]; x = parent[x]; } return x; }
+  for (var i=0; i<arr.length; i++){
+    for (var j=i+1; j<arr.length; j++){
+      if (arr[i].src === arr[j].src) continue;
+      var shared = 0;
+      for (var k=0; k<toks[i].length; k++) if (toks[j].indexOf(toks[i][k]) !== -1) shared++;
+      if (shared >= 2){ parent[find(i)] = find(j); }
+    }
+  }
+  var groups = {};
+  arr.forEach(function(it, i){ var r = find(i); (groups[r] = groups[r] || []).push(it); });
+  var clusters = [];
+  for (var r in groups){
+    var g = groups[r].sort(function(a,b){ return b.time - a.time; });
+    var srcs = {}; g.forEach(function(it){ srcs[it.src] = 1; });
+    var lead = null;
+    for (var m=0; m<g.length; m++){ if (g[m].desc && g[m].desc.length > 60){ lead = g[m]; break; } }
+    lead = lead || g[0];
+    var alts = [], seenSrc = {}; seenSrc[lead.src] = 1;
+    g.forEach(function(it){
+      if (!seenSrc[it.src] && alts.length < 3){ seenSrc[it.src] = 1; alts.push({ src: it.src, link: it.link }); }
+    });
+    clusters.push({ id: lead.id, title: lead.title, link: lead.link, time: lead.time,
+                    src: lead.src, lang: '', desc: lead.desc, alts: alts,
+                    heat: Object.keys(srcs).length });
+  }
+  return clusters.sort(function(a,b){ return (b.heat - a.heat) || (b.time - a.time); });
 }
 
 /* ---------- load section ---------- */
@@ -301,6 +371,7 @@ function loadAll(force){
   if (loading) return;
   var cached = null;
   try { cached = JSON.parse(store.get('ob_cache') || 'null'); } catch(e){}
+  if (cached && !SECTIONS.every(function(s){ return cached.items && cached.items[s.id]; })) { force = true; } // app updated: new sections
   if (cached && !force && (Date.now() - cached.ts) < CACHE_MIN*60e3){
     items = cached.items; failed = cached.failed || [];
     render(); return;
@@ -318,7 +389,7 @@ function loadAll(force){
     sec.feeds.forEach(function(feed){
       ps.push(
         fetchFeed(feed)
-          .then(function(xml){ newItems[sec.id] = newItems[sec.id].concat(parseFeed(xml, feed)); })
+          .then(function(xml){ newItems[sec.id] = newItems[sec.id].concat(parseFeed(xml, feed, sec.per)); })
           .catch(function(){ newFailed.push(feed.name); })
           .then(function(){ done++; if (run === runSeq) setStatus('Fetching your sources… ' + done + '/' + total); })
       );
@@ -327,16 +398,17 @@ function loadAll(force){
   Promise.all(ps).then(function(){
     if (run !== runSeq) return; // a newer refresh superseded this one
     SECTIONS.forEach(function(sec){
-      var seen = {};
-      newItems[sec.id] = newItems[sec.id]
-        .sort(function(a,b){ return b.time - a.time; })
-        .filter(function(it){
-          var k = normTitle(it.title);
-          if (seen[k]) return false; seen[k]=1;
-          // don't resurface items older than 3 days
-          return (Date.now() - it.time) < 3*24*3600e3 || true;
-        })
-        .slice(0, PER_SECTION);
+      var fresh = newItems[sec.id]
+        .filter(function(it){ return (Date.now() - it.time) < 3*24*3600e3; })
+        .sort(function(a,b){ return b.time - a.time; });
+      if (sec.front){
+        newItems[sec.id] = clusterFront(fresh).slice(0, 12);
+      } else {
+        var seen = {};
+        newItems[sec.id] = fresh
+          .filter(function(it){ var k = normTitle(it.title); if (seen[k]) return false; seen[k]=1; return true; })
+          .slice(0, PER_SECTION);
+      }
     });
     var any = SECTIONS.some(function(s){ return newItems[s.id].length; });
     if (any){
@@ -385,13 +457,24 @@ function render(){
             'That’s everything worth reading here. The feed has a bottom — this is it.') +
       '</div></div>';
   }
+  var isFront = (SECTIONS.filter(function(s){ return s.id === current; })[0] || {}).front;
   unread.concat(read).forEach(function(it){
     var isRead = !!readSet[it.id];
-    html += '<a class="card' + (isRead?' read':'') + '" data-id="' + it.id + '" href="' + esc(it.link) + '" target="_blank" rel="noopener">' +
+    var card = '<a class="card' + (isRead?' read':'') + '" data-id="' + it.id + '" href="' + esc(it.link) + '" target="_blank" rel="noopener">' +
       '<div class="meta"><span class="src">' + esc(it.src) + '</span>' +
       (it.lang ? '<span class="lang">' + it.lang + '</span>' : '') +
+      (it.heat > 1 ? '<span class="heat">▲ ' + it.heat + ' sources</span>' : '') +
       '<span class="ago">' + ago(it.time) + '</span></div>' +
-      '<h2>' + esc(it.title) + '</h2></a>';
+      '<h2>' + esc(it.title) + '</h2>' +
+      (isFront && it.desc ? '<p class="blurb">' + esc(it.desc) + '</p>' : '') +
+      '</a>';
+    if (isFront && it.alts && it.alts.length){
+      card = '<div class="fgroup">' + card + '<div class="alts">Also at ' +
+        it.alts.map(function(a){
+          return '<a href="' + esc(a.link) + '" target="_blank" rel="noopener">' + esc(a.src) + '</a>';
+        }).join(' · ') + '</div></div>';
+    }
+    html += card;
   });
   if (!arr.length && !loading){
     html = '<div class="done"><div class="big">📡</div><div class="msg">Nothing loaded yet</div><div class="sub">Tap refresh to fetch stories.</div></div>';
